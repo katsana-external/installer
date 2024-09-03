@@ -54,7 +54,8 @@ class Installation implements InstallationContract
         ! $multiple && $this->noExistingUser();
 
         $this->create(
-            $this->createUser($input), $input
+            $this->createUser($input),
+            $input
         );
 
         // Installation is successful, we should be able to generate
@@ -89,7 +90,7 @@ class Installation implements InstallationContract
             'backend' => 'default',
         ]);
 
-        \dispatch_now(new UpdateMailConfiguration($input['site_name'], $input['email']));
+        \dispatch_sync(new UpdateMailConfiguration($input['site_name'], $input['email']));
 
         // We should also create a basic ACL for Orchestra Platform, since
         // the basic roles is create using Fluent Query Builder we need

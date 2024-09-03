@@ -6,6 +6,8 @@ use Orchestra\Contracts\Authorization\Authorization;
 
 class AuthorizationCreated extends Event
 {
+    protected $acl;
+
     /**
      * Create a new event instance.
      *
