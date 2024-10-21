@@ -2,7 +2,11 @@
     "name": "orchestra/installer",
     "description": "Orchestra Platform Installer",
     "license": "MIT",
-    "keywords": ["orchestra-platform", "orchestral", "installer"],
+    "keywords": [
+        "orchestra-platform",
+        "orchestral",
+        "installer"
+    ],
     "authors": [
         {
             "name": "Mior Muhammad Zaki",
@@ -12,26 +16,36 @@
     ],
     "autoload": {
         "psr-4": {
-            "Orchestra\\Installation\\" : "src/"
+            "Orchestra\\Installation\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Orchestra\\Installation\\Tests\\" : "tests/"
+            "Orchestra\\Installation\\Tests\\": "tests/"
         }
     },
     "require": {
-        "php": "^7.3 || ^8.0",
-        "orchestra/contracts": "^6.0"
+        "php": " ^8.0",
+        "orchestra/contracts": "^7.0"
     },
     "require-dev": {
-        "orchestra/canvas": "^6.1",
-        "orchestra/foundation": "^6.0",
-        "orchestra/testing": "^6.0"
+        "orchestra/canvas": "^7.0",
+        "orchestra/foundation": "7.x",
+        "orchestra/testing": "7.0.x-dev"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/katsana-external/testing"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/katsana-external/foundation"
+        }
+    ],
     "extra": {
         "branch-alias": {
-            "dev-master": "6.0-dev"
+            "dev-master": "7.0-dev"
         }
     },
     "config": {
