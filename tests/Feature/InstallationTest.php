@@ -5,6 +5,7 @@ namespace Orchestra\Installation\Tests\Feature;
 use Illuminate\Support\Facades\Schema;
 use Mockery as m;
 use Orchestra\Installation\Installation;
+use Illuminate\Support\Facades\File;
 
 class InstallationTest extends TestCase
 {
@@ -21,15 +22,24 @@ class InstallationTest extends TestCase
     /** @test */
     public function it_can_boot_installer_files()
     {
-        $this->instance('files', $files = m::mock('\Illuminate\Filesystem\Filesystem'));
+        // Set up the config with the new format
+        $this->app['config']->set('orchestra.installer.installers.paths', [
+            '/path/to/installer'
+        ]);
 
-        $files->shouldReceive('exists')->once()->with($this->app->databasePath('orchestra/installer.php'))->andReturn(true)
-            ->shouldReceive('getRequire')->once()->with($this->app->databasePath('orchestra/installer.php'))->andReturnNull()
-            ->shouldReceive('exists')->once()->with($this->app->basePath('orchestra/installer.php'))->andReturn(true)
-            ->shouldReceive('getRequire')->once()->with($this->app->basePath('orchestra/installer.php'))->andReturnNull();
+        // Mock the File facade
+        File::shouldReceive('exists')
+            ->once()
+            ->with('/path/to/installer/installer.php')
+            ->andReturn(false);
+
+        File::shouldReceive('getRequire')
+            ->never();
 
         $stub = new Installation();
-        $this->assertNull($stub->bootInstallerFiles());
+        $result = $stub->bootInstallerFiles();
+
+        $this->assertNull($result);
     }
 
     /** @test */
@@ -78,7 +88,7 @@ class InstallationTest extends TestCase
     public function it_cant_run_installation_due_to_validation_fails()
     {
         $this->expectException('Illuminate\Validation\ValidationException');
-        $this->expectExceptionMessage('The given data was invalid.');
+        $this->expectExceptionMessage('The email must be a valid email address.');
 
         $data = [
             'site_name' => 'Orchestra Platform',

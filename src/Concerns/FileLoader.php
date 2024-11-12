@@ -37,10 +37,10 @@ trait FileLoader
             return;
         }
 
-        $paths = \config('orchestra/installer::installers.paths', []);
+        $paths = config('orchestra.installer.installers.paths', []);
 
         Collection::make($paths)->transform(static function ($path) {
-            return \rtrim($path, '/').'/installer.php';
+            return rtrim($path, '/').'/installer.php';
         })->filter(static function ($file) {
             return File::exists($file);
         })->each(static function ($file) {
