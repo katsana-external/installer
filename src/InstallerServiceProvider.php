@@ -30,6 +30,9 @@ class InstallerServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        $path = \realpath(__DIR__ . '/../');
+        $this->mergeConfigFrom("{$path}/config/config.php", 'orchestra.installer');
+
         $this->app->singleton(InstallationContract::class, static function () {
             return new Installation();
         });
@@ -53,8 +56,6 @@ class InstallerServiceProvider extends ModuleServiceProvider
 
     /**
      * Get the events and handlers.
-     *
-     * @return array
      */
     public function listens(): array
     {
@@ -67,8 +68,6 @@ class InstallerServiceProvider extends ModuleServiceProvider
 
     /**
      * Register redirection services.
-     *
-     * @return void
      */
     protected function registerRedirection(): void
     {
@@ -79,8 +78,6 @@ class InstallerServiceProvider extends ModuleServiceProvider
 
     /**
      * Add default specifications.
-     *
-     * @param  \Orchestra\Contracts\Installation\Requirement  $requirement
      *
      * @return \Orchestra\Contracts\Installation\Requirement
      */
@@ -95,29 +92,37 @@ class InstallerServiceProvider extends ModuleServiceProvider
 
     /**
      * Boot extension components.
-     *
-     * @return void
      */
     public function bootExtensionComponents(): void
     {
-        $path = \realpath(__DIR__.'/../');
+        $path = \realpath(__DIR__ . '/../');
 
         $this->publishes([
-            "{$path}/config" => config_path('orchestra/installer'),
-        ], 'orchestra-installer-config');
+            "{$path}/config/config.php" => config_path('orchestra/installer.php'),
+        ], ['orchestra-installer', 'laravel-config']);
 
         $this->loadTranslationsFrom("{$path}/resources/lang", 'orchestra/installer');
         $this->loadViewsFrom("{$path}/resources/views", 'orchestra/installer');
     }
 
     /**
+     * Boot the service provider.
+     */
+    public function boot()
+    {
+        $path = \realpath(__DIR__ . '/../');
+
+        $this->mergeConfigFrom("{$path}/config/config.php", 'orchestra.installer');
+
+        parent::boot();
+    }
+
+    /**
      * Load extension routes.
-     *
-     * @return void
      */
     protected function loadRoutes(): void
     {
-        $path = \realpath(__DIR__.'/../');
+        $path = \realpath(__DIR__ . '/../');
 
         $this->loadBackendRoutesFrom("{$path}/routes/web.php");
     }
