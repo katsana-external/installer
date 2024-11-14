@@ -7,11 +7,16 @@ use Orchestra\Contracts\Authorization\Authorization;
 class AuthorizationCreated extends Event
 {
     /**
-     * Create a new event instance.
+     * The ACL instance.
      *
-     * @param  \Orchestra\Contracts\Authorization\Authorization  $acl
+     * @var \Orchestra\Contracts\Authorization\Authorization
      */
-    public function __construct(Authorization $acl)
+    public $acl;
+
+    /**
+     * Create a new event instance.
+     */
+    public function __construct($acl)
     {
         $this->acl = $acl;
     }
